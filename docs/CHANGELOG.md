@@ -1,4 +1,11 @@
 # CHANGELOG
+<!-- CURRENT_TASK: 20260128-093804 -->
+
+## [20260128-093804] Fix project root detection and fallback for trashit
+- **开始时间**: 2026-01-28 09:38:04
+- **完成时间**: (进行中)
+- **类型**: (待定)
+- **描述**: (待补充)
 
 ## [20260128-093019] Support multi-platform builds for trashit
 - **开始时间**: 2026-01-28 09:30:19
