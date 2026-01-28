@@ -1,19 +1,18 @@
 # Design Document
 
 ## Architecture
-The `trashit` skill is implemented as a Rust CLI tool.
+`trashit` is implemented as a high-performance Rust CLI tool, designed to provide stable and predictable safe deletion services.
 
-### Components
-1. **CLI Layer (`clap`)**: Handles argument parsing for multiple file paths.
-2. **Deletion Logic**:
-    - Uses the `trash` crate for native integration.
-    - Implements a custom fallback to a `.trash` directory within the project root.
-3. **Build System**:
-    - `scripts/build.sh` (Unix) and `scripts/build.bat` (Windows) for cross-compilation.
-    - Assets management (SKILL.md) during the distribution phase.
+### Core Components
+1. **CLI Interaction Layer (`clap`)**: Supports multiple path inputs, allowing AI assistants to process multiple files in a single command.
+2. **Multi-Level Deletion Logic**:
+    - Integrates the `trash` crate to invoke native operating system APIs.
+    - Custom `.trash` fallback logic ensures safety even in environments without a system trash (e.g., certain CI environments or Docker containers).
+3. **Data Traceability**:
+    - Automatically detects the project root directory (via `.git` or `.agent` markers).
+    - Path Structure: `[root]/.trash/[filename]/[filename]_[timestamp]`.
+    - Facilitates precise recovery of specific versions of deleted files, even in fallback mode.
 
-### Fallback Strategy
-1. Try Native API.
-2. If failure, find project root (containing `.git` or `.agent`).
-3. Move to `[root]/.trash/[filename]/[filename]_[timestamp]`.
-4. Handle cross-device moves via copy-and-delete.
+### Safety Strategy
+- **Atomic Attempts**: Prioritizes moving files. If moving across file systems, it performs a "copy-then-delete" operation to ensure at least one copy of the data exists at all times.
+- **Lossless Operations**: Preserves original file metadata whenever possible.
