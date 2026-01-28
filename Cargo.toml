@@ -9,6 +9,7 @@ chrono = "0.4"
 trash = "3.1"
 anyhow = "1.0"
 walkdir = "2.4"
+home = "=0.5.5"
 # Pin dependencies to support Rust 1.78.0
 url = "=2.5.0"
 idna = "=0.5.0"

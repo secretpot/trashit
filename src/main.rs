@@ -50,8 +50,7 @@ fn delete_item(path: &Path) -> Result<()> {
 }
 
 fn use_local_trash(path: &Path) -> Result<()> {
-    let project_root = find_project_root().context("Could not find project root for .trash fallback")?;
-    let trash_dir = project_root.join(".trash");
+    let trash_dir = find_trash_dir();
 
     if !trash_dir.exists() {
         fs::create_dir_all(&trash_dir).context("Failed to create .trash directory")?;
@@ -82,10 +81,26 @@ fn use_local_trash(path: &Path) -> Result<()> {
     Ok(())
 }
 
+fn find_trash_dir() -> PathBuf {
+    // 1. Try to find project root (.git, .agent, or existing .trash)
+    if let Some(root) = find_project_root() {
+        return root.join(".trash");
+    }
+
+    // 2. Fallback to home directory
+    if let Some(home) = home::home_dir() {
+        return home.join(".trash");
+    }
+
+    // 3. Absolute last resort: current directory
+    PathBuf::from(".trash")
+}
+
 fn find_project_root() -> Option<PathBuf> {
     let mut current = std::env::current_dir().ok()?;
     loop {
-        if current.join(".git").exists() || current.join(".agent").exists() {
+        // Look for common markers
+        if current.join(".git").exists() || current.join(".agent").exists() || current.join(".trash").exists() {
             return Some(current);
         }
         if !current.pop() {
