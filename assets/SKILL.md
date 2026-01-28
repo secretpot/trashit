@@ -22,24 +22,23 @@ The skill implements a robust fallback strategy:
 
 ## Usage Instructions
 ### Before Deleting Files
-Always use `trashit` instead of `rm` or `del`:
+Always use `trashit` instead of `rm` or `del`. Use the absolute path to the binary appropriate for your operating system (e.g., `.agent/skills/trashit/bin/trashit`).
 
-```bash
-# ✅ Use the binary for your platform
-.agent/skills/trashit/bin/trashit file.txt
-.agent/skills/trashit/bin/trashit directory/
+```
+<path_to_trashit> file.txt
+<path_to_trashit> directory/
 ```
 
 ### Example Workflow
-```bash
+```
 # Delete a single file
-.agent/skills/trashit/bin/trashit old_file.txt
+<path_to_trashit> old_file.txt
 
 # Delete a directory
-.agent/skills/trashit/bin/trashit old_directory/
+<path_to_trashit> old_directory/
 
 # Delete multiple items
-.agent/skills/trashit/bin/trashit file1.txt file2.txt file3.txt
+<path_to_trashit> file1.txt file2.txt file3.txt
 ```
 
 ## Recovery Instructions
