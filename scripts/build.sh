@@ -15,7 +15,7 @@ get_rust_target() {
         macos_arm64) echo "aarch64-apple-darwin" ;;
         linux_amd64) echo "x86_64-unknown-linux-musl" ;;
         linux_arm64) echo "aarch64-unknown-linux-musl" ;;
-        windows_amd64) echo "x86_64-pc-windows-msvc" ;;
+        windows_amd64) echo "x86_64-pc-windows-gnu" ;;
         *) echo "" ;;
     esac
 }
@@ -50,6 +50,21 @@ build_target() {
     
     echo "Building for $TARGET_KEY ($RUST_TARGET)..."
     
+    # Set linkers for cross-compilation on macOS
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        case "$RUST_TARGET" in
+            x86_64-unknown-linux-musl)
+                export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER="x86_64-linux-musl-gcc"
+                ;;
+            aarch64-unknown-linux-musl)
+                export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER="aarch64-linux-musl-gcc"
+                ;;
+            x86_64-pc-windows-gnu)
+                export CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER="x86_64-w64-mingw32-gcc"
+                ;;
+        esac
+    fi
+    
     # Check if target is installed
     if ! rustup target list | grep -q "$RUST_TARGET (installed)"; then
         echo "Installing target $RUST_TARGET..."
@@ -66,7 +81,7 @@ build_target() {
     
     # Copy binary
     local BIN_NAME=$APP_NAME
-    if [[ "$TARGET_KEY" == windows* ]]; then
+    if [[ "$RUST_TARGET" == *windows* ]]; then
         BIN_NAME="${APP_NAME}.exe"
     fi
     cp "target/$RUST_TARGET/release/$BIN_NAME" "$TARGET_DIST/bin/"
