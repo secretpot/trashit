@@ -1,11 +1,10 @@
 # CHANGELOG
-<!-- CURRENT_TASK: 20260128-134827 -->
 
 ## [20260128-134827] Prepare v1.0.0 release: README and GitHub CI/CD
 - **开始时间**: 2026-01-28 13:48:27
-- **完成时间**: (进行中)
-- **类型**: (待定)
-- **描述**: (待补充)
+- **完成时间**: 2026-01-28 13:55:14
+- **类型**: chore
+- **描述**: refine v1.0.0 release: README and CI/CD
 
 ## [20260128-133759] Supplement project documentation with background and context
 - **开始时间**: 2026-01-28 13:37:59
